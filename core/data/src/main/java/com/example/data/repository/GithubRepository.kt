@@ -12,7 +12,7 @@ interface GithubRepository {
         page: Int,
         perPage: Int,
         searchText: String
-    ): Flow<Response<GithubResponse>>
+    ): Response<GithubResponse>
 }
 
 class GithubRepositoryImpl @Inject constructor(
@@ -23,7 +23,7 @@ class GithubRepositoryImpl @Inject constructor(
         page: Int,
         perPage: Int,
         searchText: String
-    ): Flow<Response<GithubResponse>> =
+    ): Response<GithubResponse> =
         githubClient.fetchGithubRepositoryList(
             page = page,
             perPage = perPage,

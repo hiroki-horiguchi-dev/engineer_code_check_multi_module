@@ -14,5 +14,5 @@ interface GithubService {
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,
         @Query("q") searchText: String
-    ): Flow<Response<GithubResponse>>
+    ): Response<GithubResponse>
 }

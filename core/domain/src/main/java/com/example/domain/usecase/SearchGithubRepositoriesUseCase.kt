@@ -11,13 +11,13 @@ interface SearchGithubRepositoriesUseCase {
         page: Int,
         perPage: Int,
         query: String
-    ): Flow<Response<GithubResponse>>
+    ): Response<GithubResponse>
 }
 
 class SearchGithubRepositoriesUseCaseImpl @Inject constructor(
     private val githubRepository: GithubRepository
 ) : SearchGithubRepositoriesUseCase {
 
-    override suspend operator fun invoke(page: Int, perPage: Int,query: String): Flow<Response<GithubResponse>> =
+    override suspend operator fun invoke(page: Int, perPage: Int,query: String): Response<GithubResponse> =
         githubRepository.searchGithubRepository(page, perPage, query)
 }

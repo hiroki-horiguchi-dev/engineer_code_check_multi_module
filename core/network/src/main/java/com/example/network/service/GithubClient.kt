@@ -10,7 +10,7 @@ class GithubClient @Inject constructor(
     private val githubService: GithubService
 ) {
 
-    suspend fun fetchGithubRepositoryList(searchText: String, page: Int, perPage: Int): Flow<Response<GithubResponse>> =
+    suspend fun fetchGithubRepositoryList(searchText: String, page: Int, perPage: Int): Response<GithubResponse> =
         githubService.fetchGithubRepositoryList(
             accept = ACCEPT,
             page = page,
