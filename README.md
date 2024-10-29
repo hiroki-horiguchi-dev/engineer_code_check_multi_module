@@ -30,7 +30,7 @@
 
 ### 環境
 
-- IDE：Android Studio Flamingo | 2022.2.1 Patch 2
+- IDE：Android Studio Ladybug | 2024.2.1 Patch 1
 - Kotlin：2.0.10
 - Java：17
 - Gradle：8.9
