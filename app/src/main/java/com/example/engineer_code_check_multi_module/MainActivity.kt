@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.engineer_code_check_multi_module.ui.theme.Engineer_code_check_multi_moduleTheme
-import dagger.hilt.EntryPoint
+import com.example.search.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,10 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Engineer_code_check_multi_moduleTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    SearchScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
