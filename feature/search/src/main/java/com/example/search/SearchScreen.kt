@@ -1,6 +1,5 @@
 package com.example.search
 
-import android.widget.ProgressBar
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.network.model.Item
-import com.google.android.material.progressindicator.LinearProgressIndicator
 
 
 @Composable
