@@ -15,14 +15,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {
-        val json = Json {
-            ignoreUnknownKeys = true
-        }
-        return Retrofit.Builder()
+        val json =
+            Json {
+                ignoreUnknownKeys = true
+            }
+        return Retrofit
+            .Builder()
             .baseUrl("https://api.github.com/")
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
@@ -30,13 +31,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGithubService(retrofit: Retrofit): GithubService {
-        return retrofit.create(GithubService::class.java)
-    }
+    fun provideGithubService(retrofit: Retrofit): GithubService = retrofit.create(GithubService::class.java)
 
     @Provides
     @Singleton
-    fun provideGithubClient(githubService: GithubService): GithubClient {
-        return GithubClient(githubService)
-    }
+    fun provideGithubClient(githubService: GithubService): GithubClient = GithubClient(githubService)
 }

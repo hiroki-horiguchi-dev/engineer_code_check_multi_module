@@ -13,7 +13,5 @@ import javax.inject.Singleton
 abstract class NetworkModule {
     @Binds
     @Singleton
-    abstract fun bindGithubRepository(
-        githubRepositoryImpl: GithubRepositoryImpl
-    ): GithubRepository
+    abstract fun bindGithubRepository(githubRepositoryImpl: GithubRepositoryImpl): GithubRepository
 }

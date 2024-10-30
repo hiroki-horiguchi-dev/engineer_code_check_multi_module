@@ -11,58 +11,66 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchScreenViewModel @Inject constructor(
-    private val searchGithubRepositoriesUseCase: SearchGithubRepositoriesUseCase
-): ViewModel() {
+class SearchScreenViewModel
+    @Inject
+    constructor(
+        private val searchGithubRepositoriesUseCase: SearchGithubRepositoriesUseCase,
+    ) : ViewModel() {
+        private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+        val uiState = _uiState.asStateFlow()
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState = _uiState.asStateFlow()
+        private var currentPage = 1
 
-    private var currentPage = 1
+        init {
+            fetch()
+        }
 
-    init {
-        fetch()
-    }
+        fun fetch(query: String = DEFAULT_QUERY) {
+            viewModelScope.launch {
+                val result =
+                    searchGithubRepositoriesUseCase.invoke(
+                        page = currentPage,
+                        perPage = PER_PAGE,
+                        query = query,
+                    )
 
-    fun fetch(query: String = DEFAULT_QUERY) {
-        viewModelScope.launch {
-            val result = searchGithubRepositoriesUseCase.invoke(
-                page = currentPage,
-                perPage = PER_PAGE,
-                query = query
-            )
-
-            if (result.isSuccessful) {
-                val body = result.body()
-                if (body != null) {
-                    _uiState.value = UiState.Success(body.items)
+                if (result.isSuccessful) {
+                    val body = result.body()
+                    if (body != null) {
+                        _uiState.value = UiState.Success(body.items)
+                    } else {
+                        // / toast message
+                    }
                 } else {
-                    /// toast message
+                    _uiState.value = UiState.Error(result.code(), result.message())
                 }
-            } else {
-                _uiState.value = UiState.Error(result.code(), result.message())
             }
         }
-    }
 
-    fun refresh(query: String = DEFAULT_QUERY) {
-        currentPage = 1
-        fetch(query = query)
-    }
+        fun refresh(query: String = DEFAULT_QUERY) {
+            currentPage = 1
+            fetch(query = query)
+        }
 
-    fun retry(query: String = DEFAULT_QUERY) {
-        fetch(query = query)
-    }
+        fun retry(query: String = DEFAULT_QUERY) {
+            fetch(query = query)
+        }
 
+        sealed class UiState {
+            data object Loading : UiState()
 
-    sealed class UiState {
-        data object Loading : UiState()
-        data class Success(val repositories: List<Item>) : UiState()
-        data class Error(val code: Int, val metadata: String) : UiState()
-    }
+            data class Success(
+                val repositories: List<Item>,
+            ) : UiState()
 
-    companion object {
-        private const val PER_PAGE = 30
-        private const val DEFAULT_QUERY = "Kotlin"
+            data class Error(
+                val code: Int,
+                val metadata: String,
+            ) : UiState()
+        }
+
+        companion object {
+            private const val PER_PAGE = 30
+            private const val DEFAULT_QUERY = "Kotlin"
+        }
     }
-}
