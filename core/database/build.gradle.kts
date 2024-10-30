@@ -33,6 +33,18 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/gradle/incremental.annotation.processors")
+            excludes.add("META-INF/services/javax.annotation.processing.Processor")
+        }
+    }
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
