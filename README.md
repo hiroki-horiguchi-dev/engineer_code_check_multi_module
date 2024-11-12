@@ -35,7 +35,7 @@
 - Java：17
 - Gradle：8.9
 - minSdk：24
-- targetSdk：34
+- targetSdk：35
 
 ※ ライブラリの利用はオープンソースのものに限ります。
 ※ 環境は適宜更新してください。
