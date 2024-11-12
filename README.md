@@ -31,7 +31,7 @@
 ### 環境
 
 - IDE：Android Studio Ladybug | 2024.2.1 Patch 1
-- Kotlin：2.0.10
+- Kotlin：2.0.20
 - Java：17
 - Gradle：8.9
 - minSdk：24
