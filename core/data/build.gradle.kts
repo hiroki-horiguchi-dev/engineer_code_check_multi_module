@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.data"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -22,7 +22,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -47,10 +47,10 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    ksp (libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Retrofit
     implementation(libs.retrofit)
-    /// okhttp3
+    // / okhttp3
     implementation(libs.okhttp3)
 }
