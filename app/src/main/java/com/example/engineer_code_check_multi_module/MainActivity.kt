@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = SearchBaseRoute.BASE_ROUTE,
                 ) {
                     searchGraph { item ->
-                        navController.navigate(DetailRoute.createRoute(name = item.name ?: "nothing"))
+                        navController.navigate(DetailRoute.createRoute(item))
                     }
                     detailGraph(navController)
                 }

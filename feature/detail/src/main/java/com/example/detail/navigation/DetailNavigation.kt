@@ -19,14 +19,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.detail.DetailScreen
+import com.example.network.model.Item
 import kotlinx.serialization.Serializable
 
 @Serializable
 object DetailRoute {
     const val ROUTE = "detail"
-    const val ROUTE_WITH_ARGS = "$ROUTE/{name}"
+    const val ROUTE_WITH_ARGS = "$ROUTE/{name}/{avatarUrl}"
 
-    fun createRoute(name: String) = "$ROUTE/${Uri.encode(name)}"
+    fun createRoute(item: Item) = "$ROUTE/${Uri.encode(item.name)}/${Uri.encode(item.owner?.avatarUrl ?: "")}"
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -34,9 +35,14 @@ object DetailRoute {
 fun NavGraphBuilder.detailGraph(navController: NavHostController) {
     composable(
         route = DetailRoute.ROUTE_WITH_ARGS,
-        arguments = listOf(navArgument("name") { type = NavType.StringType }),
+        arguments =
+            listOf(
+                navArgument("name") { type = NavType.StringType },
+                navArgument("avatarUrl") { type = NavType.StringType },
+            ),
     ) { backStackEntry ->
         val name = backStackEntry.arguments?.getString("name") ?: ""
+        val avatarUrl = backStackEntry.arguments?.getString("avatarUrl") ?: ""
         Scaffold(
             topBar = {
                 // DetailScreen 用の TopAppBar
@@ -58,6 +64,7 @@ fun NavGraphBuilder.detailGraph(navController: NavHostController) {
         ) { innerPadding ->
             DetailScreen(
                 name = name,
+                avatarUrl = avatarUrl,
                 innerPadding = innerPadding,
                 modifier = Modifier,
             )
