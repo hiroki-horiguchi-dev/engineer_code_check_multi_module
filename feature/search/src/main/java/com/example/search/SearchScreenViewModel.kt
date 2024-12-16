@@ -3,29 +3,33 @@ package com.example.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.SearchGithubRepositoriesUseCase
-import com.example.network.model.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@Suppress("ktlint:standard:backing-property-naming")
 @HiltViewModel
 class SearchScreenViewModel
     @Inject
     constructor(
         private val searchGithubRepositoriesUseCase: SearchGithubRepositoriesUseCase,
     ) : ViewModel() {
-        private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-        val uiState = _uiState.asStateFlow()
+        internal var query = DEFAULT_QUERY
+        internal var isLastPage = false
+
+        internal val _uiState = MutableStateFlow<SearchScreenUiState>(SearchScreenUiState.Loading)
+        internal val uiState = _uiState.asStateFlow()
 
         private var currentPage = 1
 
         init {
-            fetch()
+            fetch(DEFAULT_QUERY)
         }
 
-        fun fetch(query: String = DEFAULT_QUERY) {
+        fun fetch(query: String) {
+            this.query = query
             viewModelScope.launch {
                 val result =
                     searchGithubRepositoriesUseCase.invoke(
@@ -35,38 +39,47 @@ class SearchScreenViewModel
                     )
 
                 if (result.isSuccessful) {
-                    val body = result.body()
-                    if (body != null) {
-                        _uiState.value = UiState.Success(body.items)
+                    val items = result.body()?.items
+                    if (items.isNullOrEmpty()) {
+                        _uiState.value = SearchScreenUiState.Empty
+                        isLastPage = true
                     } else {
-                        // / toast message
+                        _uiState.value = SearchScreenUiState.Success(items)
+                        currentPage++
                     }
                 } else {
-                    _uiState.value = UiState.Error(result.code(), result.message())
+                    _uiState.value = SearchScreenUiState.Error(result.code(), result.message())
                 }
             }
         }
 
-        fun refresh(query: String = DEFAULT_QUERY) {
-            currentPage = 1
-            fetch(query = query)
-        }
+        fun fetchNext() {
+            if (isLastPage) return
 
-        fun retry(query: String = DEFAULT_QUERY) {
-            fetch(query = query)
-        }
+            _uiState.value =
+                (_uiState.value as? SearchScreenUiState.Success)?.copy(isLoading = true)
+                    ?: SearchScreenUiState.Loading
+            viewModelScope.launch {
+                val result =
+                    searchGithubRepositoriesUseCase.invoke(
+                        page = currentPage,
+                        perPage = PER_PAGE,
+                        query = query,
+                    )
 
-        sealed class UiState {
-            data object Loading : UiState()
-
-            data class Success(
-                val repositories: List<Item>,
-            ) : UiState()
-
-            data class Error(
-                val code: Int,
-                val metadata: String,
-            ) : UiState()
+                if (result.isSuccessful) {
+                    val items = result.body()?.items
+                    if (items.isNullOrEmpty()) {
+                        _uiState.value = SearchScreenUiState.Empty
+                        isLastPage = true
+                    } else {
+                        _uiState.value = SearchScreenUiState.Success(items)
+                        currentPage++
+                    }
+                } else {
+                    _uiState.value = SearchScreenUiState.Error(result.code(), result.message())
+                }
+            }
         }
 
         companion object {

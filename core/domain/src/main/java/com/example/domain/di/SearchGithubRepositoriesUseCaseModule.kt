@@ -11,10 +11,9 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class SearchGithubRepositoriesUseCaseModule {
-
     @Binds
     @Singleton
     abstract fun bindSearchGithubRepositoriesUseCase(
-        searchGithubRepositoriesUseCaseImpl: SearchGithubRepositoriesUseCaseImpl
+        searchGithubRepositoriesUseCaseImpl: SearchGithubRepositoriesUseCaseImpl,
     ): SearchGithubRepositoriesUseCase
 }
