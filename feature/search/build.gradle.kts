@@ -67,4 +67,7 @@ dependencies {
 
     // / Retrofit
     implementation(libs.retrofit)
+
+    // Glide
+    implementation(libs.glide)
 }
