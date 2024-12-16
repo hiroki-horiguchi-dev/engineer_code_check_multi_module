@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.example.detail.navigation.DetailRoute
+import com.example.detail.navigation.detailGraph
 import com.example.engineer_code_check_multi_module.ui.theme.Engineer_code_check_multi_moduleTheme
-import com.example.search.SearchScreen
+import com.example.search.navigation.SearchBaseRoute
+import com.example.search.navigation.searchGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,33 +20,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Engineer_code_check_multi_moduleTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    SearchScreen(
-                        onSearchItemClick = {
-                        },
-                        innerPadding = innerPadding,
-                    )
+                val navController = rememberNavController()
+                NavHost(
+                    navController = navController,
+                    startDestination = SearchBaseRoute.BASE_ROUTE,
+                ) {
+                    searchGraph { item ->
+                        navController.navigate(DetailRoute.createRoute(item))
+                    }
+                    detailGraph(navController)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(
-    name: String,
-    modifier: Modifier = Modifier,
-) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Engineer_code_check_multi_moduleTheme {
-        Greeting("Android")
     }
 }
