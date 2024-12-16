@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="additional_error_msg">%1$s\\nまたは、通信環境(機内モード等)をご確認の上、\\n再度検索してください。\n</string>
+    <string name="error_exception_msg_empty">エラーが発生しました。通信環境(機内モード等)をご確認の上再度検索してください。</string>
+    <string name="ex_kotlin">リポジトリを検索してください ex.kotlin</string>
+    <string name="list_empty">データ件数0件です。\\n検索ワードを変更して再度検索してください。</string>
+</resources>

@@ -16,11 +16,11 @@ data class Item(
     @SerialName(value = "forks_count")
     val forksCount: Long?,
     @SerialName(value = "open_issues_count")
-    val openIssuesCount: Long?
+    val openIssuesCount: Long?,
 )
 
 @Serializable
 data class Owner(
     @SerialName(value = "avatar_url")
-    val avatarUrl: String
+    val avatarUrl: String,
 )
